@@ -464,14 +464,13 @@ async function processInitForm(
 
     // // TODO: handle exceptions
     // // Use dynamic import for ES module
-    // const NetworksRegistry = (await import('@pinax/graph-networks-registry')).NetworksRegistry;
+    const NetworksRegistry = (await import('@pinax/graph-networks-registry')).NetworksRegistry;
 
-    // const { networks } = await NetworksRegistry.fromLatestVersion();
-    // if (!networks) {
-    //   this.error('Unable to fetch available networks', { exit: 1 });
-    // }
+    const { networks } = await NetworksRegistry.fromLatestVersion();
+    if (!networks) {
+      this.error('Unable to fetch available networks', { exit: 1 });
+    }
 
-    const networks: { id: string }[] = [];
     const choices = networks.map((n: { id: string }) => n.id);
     const { network } = await prompt.ask<{ network: string }>([
       {
