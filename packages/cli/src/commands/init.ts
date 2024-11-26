@@ -462,8 +462,8 @@ async function processInitForm(
       },
     ]);
 
-    // // TODO: handle exceptions
-    // // Use dynamic import for ES module
+    // Use dynamic import for ES module instead of:
+    // import { NetworksRegistry } from '@pinax/graph-networks-registry';
     const NetworksRegistry = (await import('@pinax/graph-networks-registry')).NetworksRegistry;
 
     const { networks } = await NetworksRegistry.fromLatestVersion();
