@@ -11,12 +11,10 @@ import {
   loadStartBlockForContract,
 } from '../command-helpers/abi';
 import { initNetworksConfig } from '../command-helpers/network';
-import { chooseNodeUrl, SUBGRAPH_STUDIO_URL } from '../command-helpers/node';
+import { chooseNodeUrl } from '../command-helpers/node';
 import { generateScaffold, writeScaffold } from '../command-helpers/scaffold';
-import { sortWithPriority } from '../command-helpers/sort';
 import { withSpinner } from '../command-helpers/spinner';
 import { getSubgraphBasename } from '../command-helpers/subgraph';
-import { GRAPH_CLI_SHARED_HEADERS } from '../constants';
 import debugFactory from '../debug';
 import Protocol, { ProtocolName } from '../protocols';
 import EthereumABI from '../protocols/ethereum/abi';
@@ -27,49 +25,6 @@ import AddCommand from './add';
 const protocolChoices = Array.from(Protocol.availableProtocols().keys());
 
 const initDebugger = debugFactory('graph-cli:commands:init');
-
-/**
- * a dynamic list of available networks supported by the studio
- */
-const AVAILABLE_NETWORKS = async () => {
-  const logger = initDebugger.extend('AVAILABLE_NETWORKS');
-  try {
-    logger('fetching chain_list from studio');
-    const res = await fetch(SUBGRAPH_STUDIO_URL, {
-      method: 'POST',
-      headers: {
-        ...GRAPH_CLI_SHARED_HEADERS,
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'chain_list',
-        params: [],
-      }),
-    });
-
-    if (!res.ok) {
-      logger(
-        "Something went wrong while fetching 'chain_list' from studio HTTP code: %o",
-        res.status,
-      );
-      return null;
-    }
-
-    const result = await res.json();
-    if (result?.result) {
-      logger('chain_list result: %o', result.result);
-      return result.result as { studio: Array<string>; hostedService: Array<string> };
-    }
-
-    logger("Unable to get result for 'chain_list' from studio: %O", result);
-    return null;
-  } catch (e) {
-    logger('error: %O', e);
-    return null;
-  }
-};
 
 const DEFAULT_EXAMPLE_SUBGRAPH = 'ethereum-gravatar';
 
@@ -507,20 +462,20 @@ async function processInitForm(
       },
     ]);
 
-    let choices = (await AVAILABLE_NETWORKS())?.['studio'];
+    // // TODO: handle exceptions
+    // // Use dynamic import for ES module
+    // const NetworksRegistry = (await import('@pinax/graph-networks-registry')).NetworksRegistry;
 
-    if (!choices) {
-      this.error(
-        'Unable to fetch available networks from API. Please report this issue. As a workaround you can pass `--network` flag from the available networks: https://thegraph.com/docs/en/developing/supported-networks',
-        { exit: 1 },
-      );
-    }
+    // const { networks } = await NetworksRegistry.fromLatestVersion();
+    // if (!networks) {
+    //   this.error('Unable to fetch available networks', { exit: 1 });
+    // }
 
-    choices = sortWithPriority(choices, ['mainnet']);
-
+    const networks: { id: string }[] = [];
+    const choices = networks.map((n: { id: string }) => n.id);
     const { network } = await prompt.ask<{ network: string }>([
       {
-        type: 'select',
+        type: 'autocomplete',
         name: 'network',
         message: () => `${protocolInstance.displayName()} network`,
         choices,
