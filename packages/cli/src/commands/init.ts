@@ -3,6 +3,7 @@ import os from 'os';
 import path from 'path';
 import { filesystem, prompt, system } from 'gluegun';
 import { Args, Command, Flags } from '@oclif/core';
+import { NetworksRegistry } from '@pinax/graph-networks-registry';
 import {
   loadAbiFromBlockScout,
   loadAbiFromEtherscan,
@@ -10,12 +11,11 @@ import {
   loadStartBlockForContract,
 } from '../command-helpers/abi.js';
 import { initNetworksConfig } from '../command-helpers/network.js';
-import { chooseNodeUrl, SUBGRAPH_STUDIO_URL } from '../command-helpers/node.js';
+import { chooseNodeUrl } from '../command-helpers/node.js';
 import { generateScaffold, writeScaffold } from '../command-helpers/scaffold.js';
 import { sortWithPriority } from '../command-helpers/sort.js';
 import { withSpinner } from '../command-helpers/spinner.js';
 import { getSubgraphBasename } from '../command-helpers/subgraph.js';
-import { GRAPH_CLI_SHARED_HEADERS } from '../constants.js';
 import debugFactory from '../debug.js';
 import EthereumABI from '../protocols/ethereum/abi.js';
 import Protocol, { ProtocolName } from '../protocols/index.js';
@@ -26,49 +26,6 @@ import AddCommand from './add.js';
 const protocolChoices = Array.from(Protocol.availableProtocols().keys());
 
 const initDebugger = debugFactory('graph-cli:commands:init');
-
-/**
- * a dynamic list of available networks supported by the studio
- */
-const AVAILABLE_NETWORKS = async () => {
-  const logger = initDebugger.extend('AVAILABLE_NETWORKS');
-  try {
-    logger('fetching chain_list from studio');
-    const res = await fetch(SUBGRAPH_STUDIO_URL, {
-      method: 'POST',
-      headers: {
-        ...GRAPH_CLI_SHARED_HEADERS,
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        id: 1,
-        method: 'chain_list',
-        params: [],
-      }),
-    });
-
-    if (!res.ok) {
-      logger(
-        "Something went wrong while fetching 'chain_list' from studio HTTP code: %o",
-        res.status,
-      );
-      return null;
-    }
-
-    const result = await res.json();
-    if (result?.result) {
-      logger('chain_list result: %o', result.result);
-      return result.result as { studio: Array<string>; hostedService: Array<string> };
-    }
-
-    logger("Unable to get result for 'chain_list' from studio: %O", result);
-    return null;
-  } catch (e) {
-    logger('error: %O', e);
-    return null;
-  }
-};
 
 const DEFAULT_EXAMPLE_SUBGRAPH = 'ethereum-gravatar';
 
@@ -503,7 +460,9 @@ async function processInitForm(
       },
     ]);
 
-    let choices = (await AVAILABLE_NETWORKS())?.['studio'];
+    const { networks } = await NetworksRegistry.fromLatestVersion();
+
+    let choices = networks.map(network => network.id); //(await AVAILABLE_NETWORKS())?.['studio'];
 
     if (!choices) {
       this.error(
