@@ -3,7 +3,7 @@ import os from 'os';
 import path from 'path';
 import { filesystem, prompt, system } from 'gluegun';
 import { Args, Command, Flags } from '@oclif/core';
-import { NetworksRegistry } from '@pinax/graph-networks-registry';
+import { Network, NetworksRegistry } from '@pinax/graph-networks-registry';
 import {
   loadAbiFromBlockScout,
   loadAbiFromEtherscan,
@@ -102,7 +102,7 @@ export default class InitCommand extends Command {
     network: Flags.string({
       summary: 'Network the contract is deployed to.',
       description:
-        'Check https://thegraph.com/docs/en/developing/supported-networks/ for supported networks',
+        'Refer to https://github.com/graphprotocol/networks-registry/ for supported networks',
       dependsOn: ['from-contract'],
     }),
   };
@@ -122,7 +122,7 @@ export default class InitCommand extends Command {
       'index-events': indexEvents,
       'skip-install': skipInstall,
       'skip-git': skipGit,
-      network,
+      network: network,
       abi: abiPath,
       'start-block': startBlock,
       spkg: spkgPath,
@@ -281,9 +281,6 @@ export default class InitCommand extends Command {
         this.exit(1);
       }
 
-      ({ node } = chooseNodeUrl({
-        node,
-      }));
       await initSubgraphFromContract.bind(this)(
         {
           protocolInstance: answers.protocolInstance,
@@ -422,6 +419,49 @@ async function processInitForm(
   let contractNameFromEtherscan: string | undefined = undefined;
 
   try {
+    let { networks } = await NetworksRegistry.fromLatestVersion();
+    networks = sortWithPriority(networks, n => n.id === 'mainnet');
+
+    const networkToChoice = (n: Network) => ({
+      name: `${n.id}:${n.shortName}:${n.fullName}`.toLowerCase(),
+      value: n.id,
+      hint: n.id,
+      message: n.fullName,
+    });
+
+    const addHiddenChoice = (choices: ReturnType<typeof networkToChoice>[]) => {
+      choices = choices.slice(0, 20);
+      const remaining = networks.length - choices.length;
+      if (remaining > 0) {
+        return [
+          ...choices,
+          {
+            name: `more`,
+            disabled: true,
+            hint: '',
+            message: `< ${remaining} filtered out >`,
+          },
+        ];
+      }
+      return choices;
+    };
+
+    const { networkSelected } = await prompt.ask<{ networkSelected: string }>({
+      type: 'autocomplete',
+      name: 'networkSelected',
+      initial: 0,
+      edgeLength: 300,
+      linebreak: true,
+      message: 'Network - start typing to filter: ',
+      choices: addHiddenChoice(networks.map(networkToChoice)),
+      suggest(input, _) {
+        return addHiddenChoice(
+          networks.map(networkToChoice).filter(choice => choice.name.includes(input.toLowerCase())),
+        );
+      },
+    });
+    console.log('networkSelected', networkSelected);
+
     const { protocol } = await prompt.ask<{ protocol: ProtocolName }>({
       type: 'select',
       name: 'protocol',
@@ -459,8 +499,6 @@ async function processInitForm(
         initial: () => initDirectory || getSubgraphBasename(subgraphName),
       },
     ]);
-
-    const { networks } = await NetworksRegistry.fromLatestVersion();
 
     let choices = networks.map(network => network.id); //(await AVAILABLE_NETWORKS())?.['studio'];
 
