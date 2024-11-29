@@ -4,12 +4,8 @@ import path from 'path';
 import { filesystem, prompt, system } from 'gluegun';
 import { Args, Command, Flags } from '@oclif/core';
 import { Network, NetworksRegistry } from '@pinax/graph-networks-registry';
-import {
-  loadAbiFromBlockScout,
-  loadAbiFromEtherscan,
-  loadContractNameForAddress,
-  loadStartBlockForContract,
-} from '../command-helpers/abi.js';
+import { ContractService } from '../command-helpers/contracts.js';
+import { resolveFile } from '../command-helpers/file-resolver.js';
 import { initNetworksConfig } from '../command-helpers/network.js';
 import { chooseNodeUrl } from '../command-helpers/node.js';
 import { generateScaffold, writeScaffold } from '../command-helpers/scaffold.js';
@@ -187,6 +183,9 @@ export default class InitCommand extends Command {
     // If all parameters are provided from the command-line,
     // go straight to creating the subgraph from an existing contract
     if (fromContract && protocol && subgraphName && directory && network && node) {
+      const registry = await NetworksRegistry.fromLatestVersion();
+      const contractService = new ContractService(registry);
+
       if (!protocolChoices.includes(protocol as ProtocolName)) {
         this.error(
           `Protocol '${protocol}' is not supported, choose from these options: ${protocolChoices.join(
@@ -208,11 +207,7 @@ export default class InitCommand extends Command {
           }
         } else {
           try {
-            if (network === 'poa-core') {
-              abi = await loadAbiFromBlockScout(ABI, network, fromContract);
-            } else {
-              abi = await loadAbiFromEtherscan(ABI, network, fromContract);
-            }
+            abi = await contractService.getABI(ABI, network, fromContract);
           } catch (e) {
             this.exit(1);
           }
@@ -264,14 +259,12 @@ export default class InitCommand extends Command {
     } else {
       // Otherwise, take the user through the interactive form
       const answers = await processInitForm.bind(this)({
-        protocol: protocol as ProtocolName | undefined,
         abi,
         abiPath,
         directory,
         contract: fromContract,
         indexEvents,
         fromExample,
-        network,
         subgraphName,
         contractName,
         startBlock,
@@ -299,6 +292,10 @@ export default class InitCommand extends Command {
         },
         { commands, addContract: true },
       );
+
+      if (answers.cleanup) {
+        answers.cleanup();
+      }
     }
     // Exit with success
     this.exit(0);
@@ -372,27 +369,23 @@ async function retryWithPrompt<T>(func: () => Promise<T>): Promise<T | undefined
 async function processInitForm(
   this: InitCommand,
   {
-    protocol: initProtocol,
     abi: initAbi,
     abiPath: initAbiPath,
     directory: initDirectory,
     contract: initContract,
     indexEvents: initIndexEvents,
     fromExample: initFromExample,
-    network: initNetwork,
     subgraphName: initSubgraphName,
     contractName: initContractName,
     startBlock: initStartBlock,
     spkgPath: initSpkgPath,
   }: {
-    protocol?: ProtocolName;
     abi: EthereumABI;
     abiPath?: string;
     directory?: string;
     contract?: string;
     indexEvents: boolean;
     fromExample?: string | boolean;
-    network?: string;
     subgraphName?: string;
     contractName?: string;
     startBlock?: string;
@@ -411,6 +404,7 @@ async function processInitForm(
       startBlock: string;
       fromExample: boolean;
       spkgPath: string | undefined;
+      cleanup: (() => void) | undefined;
     }
   | undefined
 > {
@@ -419,67 +413,72 @@ async function processInitForm(
   let contractNameFromEtherscan: string | undefined = undefined;
 
   try {
-    let { networks } = await NetworksRegistry.fromLatestVersion();
-    networks = sortWithPriority(networks, n => n.id === 'mainnet');
+    const registry = await NetworksRegistry.fromLatestVersion();
+    const contractService = new ContractService(registry);
+
+    const networks = sortWithPriority(registry.networks, n =>
+      ['mainnet', 'matic', 'arbitrum-one'].includes(n.id),
+    );
 
     const networkToChoice = (n: Network) => ({
-      name: `${n.id}:${n.shortName}:${n.fullName}`.toLowerCase(),
-      value: n.id,
+      name: n.id,
+      value: `${n.id}:${n.shortName}:${n.fullName}`.toLowerCase(),
       hint: n.id,
-      message: n.fullName,
+      message: `• ${n.fullName}`,
     });
 
-    const addHiddenChoice = (choices: ReturnType<typeof networkToChoice>[]) => {
-      choices = choices.slice(0, 20);
-      const remaining = networks.length - choices.length;
-      if (remaining > 0) {
-        return [
-          ...choices,
-          {
-            name: `more`,
-            disabled: true,
-            hint: '',
-            message: `< ${remaining} filtered out >`,
-          },
-        ];
-      }
-      return choices;
+    const formatChoices = (choices: ReturnType<typeof networkToChoice>[]) => {
+      const shown = choices.slice(0, 20);
+      const remaining = networks.length - shown.length;
+      if (remaining == 0) return shown;
+      return [
+        ...shown,
+        {
+          name: `more`,
+          disabled: true,
+          hint: '',
+          message: `  < ${remaining} more >`,
+        },
+      ];
     };
 
-    const { networkSelected } = await prompt.ask<{ networkSelected: string }>({
+    const { networkId } = await prompt.ask<{ networkId: string }>({
       type: 'autocomplete',
-      name: 'networkSelected',
-      initial: 0,
-      edgeLength: 300,
-      linebreak: true,
-      message: 'Network - start typing to filter: ',
-      choices: addHiddenChoice(networks.map(networkToChoice)),
-      suggest(input, _) {
-        return addHiddenChoice(
-          networks.map(networkToChoice).filter(choice => choice.name.includes(input.toLowerCase())),
-        );
-      },
+      name: 'networkId',
+      required: true,
+      message: 'Network',
+      choices: formatChoices(networks.map(networkToChoice)),
+      format: value => `${value}`,
+      suggest: (input, _) =>
+        formatChoices(
+          networks
+            .map(networkToChoice)
+            .filter(({ value }) => (value ?? '').includes(input.toLowerCase())),
+        ),
     });
-    console.log('networkSelected', networkSelected);
 
-    const { protocol } = await prompt.ask<{ protocol: ProtocolName }>({
+    const network = networks.find(n => n.id === networkId)!;
+
+    const { protocol } = await prompt.ask<{ protocol: string }>({
       type: 'select',
       name: 'protocol',
       message: 'Protocol',
-      choices: protocolChoices,
-      skip: protocolChoices.includes(String(initProtocol) as ProtocolName),
-      result: value => {
-        if (initProtocol) {
-          initDebugger.extend('processInitForm')('initProtocol: %O', initProtocol);
-          return initProtocol;
+      choices: [network.graphNode?.protocol ?? '', 'substreams'].filter(Boolean),
+      validate: value => {
+        if (value === 'arweave') {
+          return 'Arweave only supported via substreams';
         }
-        initDebugger.extend('processInitForm')('protocol: %O', value);
-        return value;
+        if (value === 'cosmos') {
+          return 'Cosmos only supported via substreams';
+        }
+        return true;
       },
     });
 
+    initDebugger.extend('processInitForm')('protocol: %O', protocol);
+
     const protocolInstance = new Protocol(protocol);
-    const isSubstreams = protocol === 'substreams';
+    const isSubstreams = protocolInstance.name === 'substreams';
     initDebugger.extend('processInitForm')('isSubstreams: %O', isSubstreams);
 
     const { subgraphName } = await prompt.ask<{ subgraphName: string }>([
@@ -497,35 +496,6 @@ async function processInitForm(
         name: 'directory',
         message: 'Directory to create the subgraph in',
         initial: () => initDirectory || getSubgraphBasename(subgraphName),
-      },
-    ]);
-
-    let choices = networks.map(network => network.id); //(await AVAILABLE_NETWORKS())?.['studio'];
-
-    if (!choices) {
-      this.error(
-        'Unable to fetch available networks from API. Please report this issue. As a workaround you can pass `--network` flag from the available networks: https://thegraph.com/docs/en/developing/supported-networks',
-        { exit: 1 },
-      );
-    }
-
-    choices = sortWithPriority(choices, ['mainnet']);
-
-    const { network } = await prompt.ask<{ network: string }>([
-      {
-        type: 'select',
-        name: 'network',
-        message: () => `${protocolInstance.displayName()} network`,
-        choices,
-        skip: initNetwork !== undefined,
-        result: value => {
-          if (initNetwork) {
-            initDebugger.extend('processInitForm')('initNetwork: %O', initNetwork);
-            return initNetwork;
-          }
-          initDebugger.extend('processInitForm')('network: %O', value);
-          return value;
-        },
       },
     ]);
 
@@ -555,30 +525,24 @@ async function processInitForm(
 
           return valid ? true : error;
         },
-        result: async (value: string) => {
+        result: async (address: string) => {
           if (initFromExample !== undefined || isSubstreams || initAbiPath) {
-            return value;
+            return address;
           }
 
           const ABI = protocolInstance.getABI();
 
           // Try loading the ABI from Etherscan, if none was provided
           if (protocolInstance.hasABIs() && !initAbi) {
-            if (network === 'poa-core') {
-              abiFromEtherscan = await retryWithPrompt(() =>
-                loadAbiFromBlockScout(ABI, network, value),
-              );
-            } else {
-              abiFromEtherscan = await retryWithPrompt(() =>
-                loadAbiFromEtherscan(ABI, network, value),
-              );
-            }
+            abiFromEtherscan = await retryWithPrompt(() =>
+              contractService.getABI(ABI, networkId, address),
+            );
           }
           // If startBlock is not set, try to load it.
           if (!initStartBlock) {
             // Load startBlock for this contract
             const startBlock = await retryWithPrompt(() =>
-              loadStartBlockForContract(network, value),
+              contractService.getStartBlock(networkId, address),
             );
             if (startBlock) {
               startBlockFromEtherscan = Number(startBlock).toString();
@@ -589,27 +553,44 @@ async function processInitForm(
           if (!initContractName) {
             // Load contract name for this contract
             const contractName = await retryWithPrompt(() =>
-              loadContractNameForAddress(network, value),
+              contractService.getContractName(networkId, address),
             );
             if (contractName) {
               contractNameFromEtherscan = contractName;
             }
           }
 
-          return value;
+          return address;
         },
       },
     ]);
 
-    const { spkg } = await prompt.ask<{ spkg: string }>([
+    let spkgPath: string | undefined;
+    let spkgCleanup: (() => void) | undefined;
+    await prompt.ask<{ spkg: string }>([
       {
         type: 'input',
         name: 'spkg',
-        message: 'SPKG file (path)',
+        message: 'SPKG path, IPFS hash, or URL',
         initial: () => initSpkgPath,
         skip: () => !isSubstreams || !!initSpkgPath,
-        validate: value =>
-          filesystem.exists(initSpkgPath || value) ? true : 'SPKG file does not exist',
+        validate: async value => {
+          return await withSpinner(
+            `Resolving SPKG file`,
+            `Failed to resolve SPKG file`,
+            `Warnings while resolving SPKG file`,
+            async () => {
+              try {
+                const { path, cleanup } = await resolveFile(value, 'substreams.spkg', 10_000);
+                spkgPath = path;
+                spkgCleanup = cleanup;
+                return true;
+              } catch (e) {
+                return e.message;
+              }
+            },
+          );
+        },
       },
     ]);
 
@@ -696,11 +677,12 @@ async function processInitForm(
       directory,
       startBlock,
       fromExample: !!initFromExample,
-      network,
+      network: network.id,
       contractName,
       contract,
       indexEvents,
-      spkgPath: spkg,
+      spkgPath,
+      cleanup: spkgCleanup,
     };
   } catch (e) {
     this.error(e, { exit: 1 });
@@ -1130,46 +1112,34 @@ async function addAnotherContract(
     },
   ]);
 
-  if (addAnother) {
-    const ProtocolContract = protocolInstance.getContract()!;
+  if (!addAnother) return false;
 
-    let validContract = '';
-    for (;;) {
-      const { contract } = await prompt.ask<{ contract: string }>([
-        {
-          type: 'input',
-          name: 'contract',
-          message: () => `\nContract ${ProtocolContract.identifierName()}`,
-          initial: ProtocolContract.identifierName(),
-          required: true,
-        },
-      ]);
-      const { valid, error } = validateContract(contract, ProtocolContract);
-      if (valid) {
-        validContract = contract;
-        break;
-      }
-      this.log(`✖ ${error}`);
+  const ProtocolContract = protocolInstance.getContract()!;
+  const { contract } = await prompt.ask<{ contract: string }>([
+    {
+      type: 'input',
+      name: 'contract',
+      initial: ProtocolContract.identifierName(),
+      required: true,
+      message: () => `\nContract ${ProtocolContract.identifierName()}`,
+      validate: value => {
+        const { valid, error } = validateContract(value, ProtocolContract);
+        return valid ? true : error;
+      },
+    },
+  ]);
+
+  const cwd = process.cwd();
+  try {
+    if (fs.existsSync(directory)) {
+      process.chdir(directory);
     }
 
-    // Get the cwd before process.chdir in order to switch back in the end of command execution
-    const cwd = process.cwd();
-
-    try {
-      if (fs.existsSync(directory)) {
-        process.chdir(directory);
-      }
-
-      const commandLine = [validContract];
-
-      await AddCommand.run(commandLine);
-    } catch (e) {
-      this.error(e);
-    } finally {
-      // TODO: safer way of doing this?
-      process.chdir(cwd);
-    }
+    await AddCommand.run([contract]);
+  } catch (e) {
+    this.error(e);
   }
+  process.chdir(cwd);
 
-  return addAnother;
+  return true;
 }

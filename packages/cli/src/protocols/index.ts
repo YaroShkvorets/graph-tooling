@@ -88,70 +88,6 @@ export default class Protocol {
     }) as immutable.Collection<ProtocolName, immutable.List<string>>;
   }
 
-  static availableNetworks() {
-    return immutable.fromJS({
-      arweave: ['arweave-mainnet'],
-      ethereum: [
-        'mainnet',
-        'rinkeby',
-        'goerli',
-        'poa-core',
-        'poa-sokol',
-        'gnosis',
-        'matic',
-        'mumbai',
-        'fantom',
-        'fantom-testnet',
-        'bsc',
-        'chapel',
-        'clover',
-        'avalanche',
-        'fuji',
-        'celo',
-        'celo-alfajores',
-        'fuse',
-        'moonbeam',
-        'moonriver',
-        'mbase',
-        'arbitrum-one',
-        'arbitrum-goerli',
-        'arbitrum-sepolia',
-        'optimism',
-        'optimism-goerli',
-        'aurora',
-        'aurora-testnet',
-        'base-testnet',
-        'base',
-        'zksync-era',
-        'zksync-era-testnet',
-        'sepolia',
-        'polygon-zkevm-testnet',
-        'polygon-zkevm',
-        'scroll-sepolia',
-        'scroll',
-      ],
-      near: ['near-mainnet', 'near-testnet'],
-      cosmos: [
-        'cosmoshub-4',
-        'theta-testnet-001', // CosmosHub testnet
-        'osmosis-1',
-        'osmo-test-4', // Osmosis testnet
-        'juno-1',
-        'uni-3', // Juno testnet
-      ],
-      substreams: ['mainnet'],
-    }) as immutable.Map<
-      | 'arweave'
-      | 'ethereum'
-      | 'near'
-      | 'cosmos'
-      | 'substreams'
-      // this is temporary, until we have a better way to handle substreams triggers
-      | 'substreams/triggers',
-      immutable.List<string>
-    >;
-  }
-
   static normalizeName(name: ProtocolName) {
     return Protocol.availableProtocols().findKey(possibleNames => {
       return possibleNames.includes(name);
@@ -315,5 +251,3 @@ const substreamsProtocol: ProtocolConfig = {
   manifestScaffold: SubstreamsManifestScaffold,
   mappingScaffold: undefined,
 };
-
-protocolDebug('Available networks %M', Protocol.availableNetworks());

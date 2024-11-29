@@ -1,3 +1,4 @@
+import fs from 'fs-extra';
 import { strings } from 'gluegun';
 import prettier from 'prettier';
 import { getSubgraphBasename } from '../command-helpers/subgraph.js';
@@ -146,6 +147,13 @@ dataSources:
     );
   }
 
+  async generateSpkgContent() {
+    if (!this.spkgPath) {
+      return undefined;
+    }
+    return fs.readFile(this.spkgPath);
+  }
+
   async generateTsConfig() {
     return await prettier.format(
       JSON.stringify({
@@ -212,6 +220,7 @@ dataSources:
         'schema.graphql': await this.generateSchema(),
         'package.json': await this.generatePackageJsonForSubstreams(),
         '.gitignore': await this.generateGitIgnoreFile(),
+        // 'substreams.spkg': await this.generateSpkgContent(),
       };
     }
     return {
