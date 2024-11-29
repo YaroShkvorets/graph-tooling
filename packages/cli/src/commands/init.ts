@@ -415,15 +415,13 @@ async function processInitForm(
     const registry = await NetworksRegistry.fromLatestVersion();
     const contractService = new ContractService(registry);
 
-    const networks = sortWithPriority(registry.networks, n =>
-      ['mainnet', 'matic', 'arbitrum-one'].includes(n.id),
-    );
+    const networks = sortWithPriority(registry.networks, n => n.issuanceRewards);
 
     const networkToChoice = (n: Network) => ({
       name: n.id,
       value: `${n.id}:${n.shortName}:${n.fullName}`.toLowerCase(),
       hint: n.id,
-      message: `• ${n.fullName}`,
+      message: `${n.fullName}`,
     });
 
     const formatChoices = (choices: ReturnType<typeof networkToChoice>[]) => {
@@ -433,7 +431,7 @@ async function processInitForm(
       return [
         ...shown,
         {
-          name: `more`,
+          name: ``,
           disabled: true,
           hint: '',
           message: `  < ${remaining} more >`,
@@ -445,6 +443,7 @@ async function processInitForm(
       type: 'autocomplete',
       name: 'networkId',
       required: true,
+      linebreak: true,
       message: 'Network',
       choices: formatChoices(networks.map(networkToChoice)),
       format: value => `${value}`,
@@ -454,6 +453,7 @@ async function processInitForm(
             .map(networkToChoice)
             .filter(({ value }) => (value ?? '').includes(input.toLowerCase())),
         ),
+      validate: value => (networks.find(n => n.id === value) ? true : 'Select a network'),
     });
 
     const network = networks.find(n => n.id === networkId)!;
@@ -477,8 +477,7 @@ async function processInitForm(
     initDebugger.extend('processInitForm')('protocol: %O', protocol);
 
     const protocolInstance = new Protocol(protocol);
-    const isSubstreams = protocolInstance.name === 'substreams';
-    initDebugger.extend('processInitForm')('isSubstreams: %O', isSubstreams);
+    initDebugger.extend('processInitForm')('isSubstreams: %O', protocolInstance.isSubstreams());
 
     const { subgraphName } = await prompt.ask<{ subgraphName: string }>([
       {
@@ -508,7 +507,9 @@ async function processInitForm(
         name: 'contract',
         message: `Contract ${protocolInstance.getContract()?.identifierName()}`,
         skip: () =>
-          initFromExample !== undefined || !protocolInstance.hasContract() || isSubstreams,
+          initFromExample !== undefined ||
+          !protocolInstance.hasContract() ||
+          protocolInstance.isSubstreams(),
         initial: initContract,
         validate: async (value: string) => {
           if (initFromExample !== undefined || !protocolInstance.hasContract()) {
@@ -525,7 +526,7 @@ async function processInitForm(
           return valid ? true : error;
         },
         result: async (address: string) => {
-          if (initFromExample !== undefined || isSubstreams || initAbiPath) {
+          if (initFromExample !== undefined || protocolInstance.isSubstreams() || initAbiPath) {
             return address;
           }
 
@@ -572,10 +573,11 @@ async function processInitForm(
         name: 'spkg',
         message: 'Substreams SPKG (local path, IPFS hash, or URL)',
         initial: () => initSpkgPath,
-        skip: () => !isSubstreams || !!initSpkgPath,
+        skip: () => !protocolInstance.isSubstreams() || !!initSpkgPath,
         validate: async value => {
+          if (!protocolInstance.isSubstreams() || !!initSpkgPath) return true;
           return await withSpinner(
-            `Resolving SPKG file`,
+            `Resolving Substreams SPKG file`,
             `Failed to resolve SPKG file`,
             `Warnings while resolving SPKG file`,
             async () => {
@@ -603,7 +605,7 @@ async function processInitForm(
           !protocolInstance.hasABIs() ||
           initFromExample !== undefined ||
           abiFromEtherscan !== undefined ||
-          isSubstreams,
+          protocolInstance.isSubstreams(),
         validate: async (value: string) => {
           if (initFromExample || abiFromEtherscan || !protocolInstance.hasABIs()) {
             return true;
@@ -642,7 +644,7 @@ async function processInitForm(
         name: 'startBlock',
         message: 'Start Block',
         initial: initStartBlock || startBlockFromEtherscan || '0',
-        skip: () => initFromExample !== undefined || isSubstreams,
+        skip: () => initFromExample !== undefined || protocolInstance.isSubstreams(),
         validate: value => parseInt(value) >= 0,
       },
     ]);
@@ -654,7 +656,9 @@ async function processInitForm(
         message: 'Contract Name',
         initial: initContractName || contractNameFromEtherscan || 'Contract',
         skip: () =>
-          initFromExample !== undefined || !protocolInstance.hasContract() || isSubstreams,
+          initFromExample !== undefined ||
+          !protocolInstance.hasContract() ||
+          protocolInstance.isSubstreams(),
         validate: value => value && value.length > 0,
       },
     ]);
@@ -665,7 +669,7 @@ async function processInitForm(
         name: 'indexEvents',
         message: 'Index contract events as entities',
         initial: true,
-        skip: () => !!initIndexEvents || isSubstreams,
+        skip: () => !!initIndexEvents || protocolInstance.isSubstreams(),
       },
     ]);
 
@@ -997,8 +1001,6 @@ async function initSubgraphFromContract(
     addContract: boolean;
   },
 ) {
-  const isSubstreams = protocolInstance.name === 'substreams';
-
   if (
     filesystem.exists(directory) &&
     !(await prompt.confirm(
@@ -1073,7 +1075,7 @@ async function initSubgraphFromContract(
   }
 
   // Substreams we have nothing to install or generate
-  if (!isSubstreams) {
+  if (!protocolInstance.isSubstreams()) {
     // Run code-generation
     const codegen = await runCodegen(directory, commands.codegen);
     if (codegen !== true) {
@@ -1105,7 +1107,7 @@ async function addAnotherContract(
     {
       type: 'confirm',
       name: 'addAnother',
-      message: () => 'Add another contract? (y/n)',
+      message: () => 'Add another contract?',
       initial: false,
       required: true,
     },

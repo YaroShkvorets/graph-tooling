@@ -123,7 +123,7 @@ dataSources:
   - kind: ${this.protocol.name}
     name: ${this.contractName}
     network: ${this.network}
-    source: ${protocolManifest.source({ spkgPath: './substreams.spkg', spkgModule: 'graph_out' })}
+    source: ${protocolManifest.source({ ...this, spkgPath: './substreams.spkg', spkgModule: 'graph_out' })}
     mapping: ${protocolManifest.mapping(this)}
 `,
       { parser: 'yaml' },

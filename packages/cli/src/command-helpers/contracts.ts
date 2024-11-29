@@ -105,15 +105,15 @@ export class ContractService {
 
   async getStartBlock(networkId: string, address: string): Promise<string> {
     const urls = this.getEtherscanUrls(networkId);
-    if (!urls.length) {
-      throw new Error(`No Etherscan API configured for network ${networkId} in registry`);
-    }
 
     return await withSpinner(
       `Fetching Start Block`,
       `Failed to fetch Start Block`,
       `Warnings while fetching deploy contract transaction from Etherscan`,
       async () => {
+        if (!urls.length) {
+          throw new Error(`No Etherscan API available`);
+        }
         for (const url of urls) {
           try {
             const json = await this.fetchFromEtherscan(
@@ -179,9 +179,8 @@ export class ContractService {
   private async fetchTransactionByHash(networkId: string, txHash: string) {
     const urls = this.getRpcUrls(networkId);
     if (!urls.length) {
-      throw new Error(`No RPC configured for network ${networkId} in registry`);
+      throw new Error(`No JSON-RPC available`);
     }
-
     for (const url of urls) {
       try {
         const response = await fetch(url, {
@@ -205,6 +204,6 @@ export class ContractService {
       }
     }
 
-    throw new Error(`RPC API is unreachable`);
+    throw new Error(`JSON-RPC is unreachable`);
   }
 }

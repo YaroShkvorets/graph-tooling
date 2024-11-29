@@ -112,6 +112,10 @@ export default class Protocol {
     return this.config.contract != null;
   }
 
+  isSubstreams() {
+    return this.name === 'substreams';
+  }
+
   hasEvents() {
     // A problem with hasEvents usage in the codebase is that it's almost every where
     // where used, the ABI data is actually use after the conditional, so it seems
