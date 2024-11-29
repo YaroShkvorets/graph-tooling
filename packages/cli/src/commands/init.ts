@@ -292,7 +292,6 @@ export default class InitCommand extends Command {
         },
         { commands, addContract: true },
       );
-
       if (answers.cleanup) {
         answers.cleanup();
       }
@@ -571,7 +570,7 @@ async function processInitForm(
       {
         type: 'input',
         name: 'spkg',
-        message: 'SPKG path, IPFS hash, or URL',
+        message: 'Substreams SPKG (local path, IPFS hash, or URL)',
         initial: () => initSpkgPath,
         skip: () => !isSubstreams || !!initSpkgPath,
         validate: async value => {

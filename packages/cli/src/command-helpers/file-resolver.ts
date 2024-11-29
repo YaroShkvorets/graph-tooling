@@ -35,7 +35,7 @@ export async function resolveFile(
 
     // Create temp directory for downloads
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'graph-file-'));
-    const cleanup = () => fs.remove(tempDir);
+    const cleanup = () => fs.removeSync(tempDir);
 
     try {
       // If it's an IPFS hash (Qm...)

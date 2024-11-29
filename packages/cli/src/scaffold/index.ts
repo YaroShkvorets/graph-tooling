@@ -123,7 +123,7 @@ dataSources:
   - kind: ${this.protocol.name}
     name: ${this.contractName}
     network: ${this.network}
-    source: ${protocolManifest.source(this)}
+    source: ${protocolManifest.source({ spkgPath: './substreams.spkg', spkgModule: 'graph_out' })}
     mapping: ${protocolManifest.mapping(this)}
 `,
       { parser: 'yaml' },
@@ -220,7 +220,7 @@ dataSources:
         'schema.graphql': await this.generateSchema(),
         'package.json': await this.generatePackageJsonForSubstreams(),
         '.gitignore': await this.generateGitIgnoreFile(),
-        // 'substreams.spkg': await this.generateSpkgContent(),
+        'substreams.spkg': await this.generateSpkgContent(),
       };
     }
     return {
