@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:23-alpine
 
 COPY . /usr/src/app
 
