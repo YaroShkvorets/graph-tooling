@@ -19,9 +19,9 @@
   "dependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.8",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.12",
-    "@types/chai": "^4.2.0",
+    "@types/chai": "^5.0.0",
     "@types/mocha": "^10.0.10",
-    "chai": "^4.2.0",
+    "chai": "^5.0.0",
     "typescript": "^5.7.2"
   },
   "devDependencies": {
