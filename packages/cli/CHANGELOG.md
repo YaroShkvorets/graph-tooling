@@ -1,5 +1,42 @@
 # @graphprotocol/graph-cli
 
+## 0.92.0
+
+### Minor Changes
+
+- [#1775](https://github.com/graphprotocol/graph-tooling/pull/1775)
+  [`7faa309`](https://github.com/graphprotocol/graph-tooling/commit/7faa3098b2e6c61f09fc81b8b2d333e66b0080d1)
+  Thanks [@0237h](https://github.com/0237h)! - Update all dependencies
+
+- [#1788](https://github.com/graphprotocol/graph-tooling/pull/1788)
+  [`edb601d`](https://github.com/graphprotocol/graph-tooling/commit/edb601dbe29e3bab1ae356b4c94d4356f84929d6)
+  Thanks [@YaroShkvorets](https://github.com/YaroShkvorets)! - - add networks registry support
+  - improve `graph init` flow
+    - filter through the networks as you type
+    - more information about the networks
+    - remove unnecessary options depending on the selection
+    - ESC key to go back
+  - allow specifying ipfs/url for substreams package
+
+### Patch Changes
+
+- [#1829](https://github.com/graphprotocol/graph-tooling/pull/1829)
+  [`4612cbd`](https://github.com/graphprotocol/graph-tooling/commit/4612cbde91c984ceeef51a1475af1a09e8554eb5)
+  Thanks [@renovate](https://github.com/apps/renovate)! - dependencies updates:
+
+  - Updated dependency [`prettier@3.4.2` ↗︎](https://www.npmjs.com/package/prettier/v/3.4.2) (from
+    `3.4.1`, in `dependencies`)
+
+- [#1810](https://github.com/graphprotocol/graph-tooling/pull/1810)
+  [`c301481`](https://github.com/graphprotocol/graph-tooling/commit/c301481d4350e3eb89074d3d0407520222bd810b)
+  Thanks [@YaroShkvorets](https://github.com/YaroShkvorets)! - fix bug with clashing \_id field name
+  in schema
+
+- [#1835](https://github.com/graphprotocol/graph-tooling/pull/1835)
+  [`299c75b`](https://github.com/graphprotocol/graph-tooling/commit/299c75b4649a452aabc8933460e04f21bf1c3058)
+  Thanks [@YaroShkvorets](https://github.com/YaroShkvorets)! - fix generated example entity id
+  uniqueness
+
 ## 0.91.1
 
 ### Patch Changes
