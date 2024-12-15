@@ -35,25 +35,26 @@ importers:
 
   examples/aggregations:
     dependencies:
-      '@graphprotocol/graph-cli':
-        specifier: 0.90.1
-        version: 0.90.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
       '@graphprotocol/graph-ts':
-        specifier: ^0.35.1
-        version: 0.35.1
+        specifier: ^0.36.0
+        version: 0.36.0
     devDependencies:
+      '@graphprotocol/graph-cli':
+        specifier: 0.91.1
+        version: 0.91.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
       matchstick-as:
         specifier: 0.6.0
         version: 0.6.0
 
   examples/arweave-blocks-transactions:
+    dependencies:
+      '@graphprotocol/graph-ts':
+        specifier: 0.36.0
+        version: 0.36.0
     devDependencies:
       '@graphprotocol/graph-cli':
-        specifier: 0.90.1
-        version: 0.90.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
-      '@graphprotocol/graph-ts':
-        specifier: 0.35.1
-        version: 0.35.1
+        specifier: 0.91.1
+        version: 0.91.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
 
   examples/cosmos-block-filtering:
     dependencies:
@@ -65,11 +66,11 @@ importers:
         version: 6.26.0
     devDependencies:
       '@graphprotocol/graph-cli':
-        specifier: 0.90.1
-        version: 0.90.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
+        specifier: 0.91.1
+        version: 0.91.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
       '@graphprotocol/graph-ts':
-        specifier: 0.35.1
-        version: 0.35.1
+        specifier: 0.36.0
+        version: 0.36.0
       mustache:
         specifier: ^4.2.0
         version: 4.2.0
@@ -84,11 +85,11 @@ importers:
         version: 6.26.0
     devDependencies:
       '@graphprotocol/graph-cli':
-        specifier: 0.90.1
-        version: 0.90.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
+        specifier: 0.91.1
+        version: 0.91.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
       '@graphprotocol/graph-ts':
-        specifier: 0.35.1
-        version: 0.35.1
+        specifier: 0.36.0
+        version: 0.36.0
 
   examples/cosmos-validator-delegations:
     dependencies:
@@ -103,11 +104,11 @@ importers:
         version: 6.26.0
     devDependencies:
       '@graphprotocol/graph-cli':
-        specifier: 0.90.1
-        version: 0.90.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
+        specifier: 0.91.1
+        version: 0.91.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
       '@graphprotocol/graph-ts':
-        specifier: 0.35.1
-        version: 0.35.1
+        specifier: 0.36.0
+        version: 0.36.0
       mustache:
         specifier: ^4.2.0
         version: 4.2.0
@@ -122,11 +123,11 @@ importers:
         version: 6.26.0
     devDependencies:
       '@graphprotocol/graph-cli':
-        specifier: 0.90.1
-        version: 0.90.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
+        specifier: 0.91.1
+        version: 0.91.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
       '@graphprotocol/graph-ts':
-        specifier: 0.35.1
-        version: 0.35.1
+        specifier: 0.36.0
+        version: 0.36.0
       mustache:
         specifier: ^4.2.0
         version: 4.2.0
@@ -153,11 +154,11 @@ importers:
         version: 5.7.2
     devDependencies:
       '@graphprotocol/graph-cli':
-        specifier: 0.90.1
-        version: 0.90.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
+        specifier: 0.91.1
+        version: 0.91.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
       '@graphprotocol/graph-ts':
-        specifier: 0.35.1
-        version: 0.35.1
+        specifier: 0.36.0
+        version: 0.36.0
       '@nomicfoundation/hardhat-toolbox':
         specifier: ^5.0.0
         version: 5.0.0(qealhu2rq4ejlqx5acmdeynyxu)
@@ -171,11 +172,11 @@ importers:
   examples/ethereum-gravatar:
     devDependencies:
       '@graphprotocol/graph-cli':
-        specifier: 0.90.1
-        version: 0.90.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
+        specifier: 0.91.1
+        version: 0.91.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
       '@graphprotocol/graph-ts':
-        specifier: 0.35.1
-        version: 0.35.1
+        specifier: 0.36.0
+        version: 0.36.0
       '@nomicfoundation/hardhat-toolbox':
         specifier: ^5.0.0
         version: 5.0.0(4bhliqvuzx2ati2zhlpmdia4ja)
@@ -186,17 +187,17 @@ importers:
   examples/example-subgraph:
     devDependencies:
       '@graphprotocol/graph-ts':
-        specifier: 0.35.1
-        version: 0.35.1
+        specifier: 0.36.0
+        version: 0.36.0
 
   examples/matic-lens-protocol-posts-subgraph:
     dependencies:
       '@graphprotocol/graph-cli':
-        specifier: 0.90.1
-        version: 0.90.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
+        specifier: 0.91.1
+        version: 0.91.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
       '@graphprotocol/graph-ts':
-        specifier: 0.35.1
-        version: 0.35.1
+        specifier: 0.36.0
+        version: 0.36.0
     devDependencies:
       matchstick-as:
         specifier: 0.6.0
@@ -205,26 +206,26 @@ importers:
   examples/near-blocks:
     devDependencies:
       '@graphprotocol/graph-cli':
-        specifier: 0.90.1
-        version: 0.90.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
+        specifier: 0.91.1
+        version: 0.91.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
       '@graphprotocol/graph-ts':
-        specifier: 0.35.1
-        version: 0.35.1
+        specifier: 0.36.0
+        version: 0.36.0
 
   examples/near-receipts:
     devDependencies:
       '@graphprotocol/graph-cli':
-        specifier: 0.90.1
-        version: 0.90.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
+        specifier: 0.91.1
+        version: 0.91.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
       '@graphprotocol/graph-ts':
-        specifier: 0.35.1
-        version: 0.35.1
+        specifier: 0.36.0
+        version: 0.36.0
 
   examples/substreams-powered-subgraph:
     devDependencies:
       '@graphprotocol/graph-cli':
-        specifier: 0.90.1
-        version: 0.90.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
+        specifier: 0.91.1
+        version: 0.91.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)
 
   packages/cli:
     dependencies:
@@ -2073,13 +2074,13 @@ packages:
       graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
       typescript: ^5.0.0
 
-  '@graphprotocol/graph-cli@0.90.1':
-    resolution: {integrity: sha512-BELpFrJ/+bjYj/p2qTEQdCgmmbbkGKE4Q2tJeGoTJ5ZJGPvwASDXvZlb1OwktCTkM5mJ5PLgJY+GB6rkSh2JSg==}
+  '@graphprotocol/graph-cli@0.91.1':
+    resolution: {integrity: sha512-T7DgFgtvqjMf4W+jGTAXfnWyNnyQTPmJSTH/qNPE9Swf1WY0r5/uiXhyzrtDql6COeuN1iTKRLgCq/OXD+b0YA==}
     engines: {node: '>=18'}
     hasBin: true
 
-  '@graphprotocol/graph-ts@0.35.1':
-    resolution: {integrity: sha512-74CfuQmf7JI76/XCC34FTkMMKeaf+3Pn0FIV3m9KNeaOJ+OI3CvjMIVRhOZdKcJxsFCBGaCCl0eQjh47xTjxKA==}
+  '@graphprotocol/graph-ts@0.36.0':
+    resolution: {integrity: sha512-yJNQK5YZWEThuawSboQQ+U4Fb2C78KBjmaoeOK7Nn0CFoChmHc+woRvW3yj+IKVSPc7JNHt4JSUHxVDJfUZbTA==}
 
   '@graphql-typed-document-node/core@3.2.0':
     resolution: {integrity: sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==}
@@ -12357,7 +12358,7 @@ snapshots:
       graphql: 16.9.0
       typescript: 5.7.2
 
-  '@graphprotocol/graph-cli@0.90.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)':
+  '@graphprotocol/graph-cli@0.91.1(@types/node@22.10.1)(bufferutil@4.0.8)(encoding@0.1.13)(node-fetch@2.7.0(encoding@0.1.13))(typescript@5.7.2)(utf-8-validate@5.0.10)':
     dependencies:
       '@float-capital/float-subgraph-uncrashable': 0.0.0-internal-testing.5
       '@oclif/core': 2.8.6(@types/node@22.10.1)(typescript@5.7.2)
@@ -12399,7 +12400,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@graphprotocol/graph-ts@0.35.1':
+  '@graphprotocol/graph-ts@0.36.0':
     dependencies:
       assemblyscript: 0.19.10
 
@@ -14491,7 +14492,7 @@ snapshots:
       '@typescript-eslint/parser': 8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2)
       eslint: 9.16.0(jiti@2.4.1)
       eslint-config-prettier: 9.1.0(eslint@9.16.0(jiti@2.4.1))
-      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0)(eslint@9.16.0(jiti@2.4.1))
+      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1))
       eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3)(eslint@9.16.0(jiti@2.4.1))
       eslint-plugin-jsonc: 2.18.2(eslint@9.16.0(jiti@2.4.1))
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.16.0(jiti@2.4.1))
@@ -14500,7 +14501,7 @@ snapshots:
       eslint-plugin-promise: 7.1.0(eslint@9.16.0(jiti@2.4.1))
       eslint-plugin-react: 7.37.2(eslint@9.16.0(jiti@2.4.1))
       eslint-plugin-react-hooks: 5.0.0(eslint@9.16.0(jiti@2.4.1))
-      eslint-plugin-sonarjs: 2.0.4(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0)(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1))
+      eslint-plugin-sonarjs: 2.0.4(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1))
       eslint-plugin-unicorn: 56.0.1(eslint@9.16.0(jiti@2.4.1))
       eslint-plugin-yml: 1.15.0(eslint@9.16.0(jiti@2.4.1))
       typescript: 5.6.2
@@ -15234,7 +15235,7 @@ snapshots:
       '@walletconnect/safe-json': 1.0.2
       '@walletconnect/time': 1.0.2
       tslib: 1.14.1
-      uint8arrays: 3.1.0
+      uint8arrays: 3.1.1
 
   '@walletconnect/safe-json@1.0.2':
     dependencies:
@@ -16712,7 +16713,7 @@ snapshots:
       object-keys: 1.1.1
       object.assign: 4.1.5
       regexp.prototype.flags: 1.5.3
-      side-channel: 1.0.6
+      side-channel: 1.1.0
       which-boxed-primitive: 1.1.0
       which-collection: 1.0.2
       which-typed-array: 1.1.16
@@ -17200,13 +17201,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0)(eslint@9.16.0(jiti@2.4.1)):
+  eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.3.7(supports-color@5.5.0)
       enhanced-resolve: 5.17.1
       eslint: 9.16.0(jiti@2.4.1)
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0)(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1))
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1))
       fast-glob: 3.3.2
       get-tsconfig: 4.8.1
       is-bun-module: 1.3.0
@@ -17246,14 +17247,14 @@ snapshots:
       - bluebird
       - supports-color
 
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0)(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)):
+  eslint-module-utils@2.12.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2)
       eslint: 9.16.0(jiti@2.4.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0)(eslint@9.16.0(jiti@2.4.1))
+      eslint-import-resolver-typescript: 3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1))
     transitivePeerDependencies:
       - supports-color
 
@@ -17264,7 +17265,7 @@ snapshots:
       eslint: 9.16.0(jiti@2.4.1)
       eslint-compat-utils: 0.5.1(eslint@9.16.0(jiti@2.4.1))
 
-  eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0)(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)):
+  eslint-plugin-import@2.30.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -17275,7 +17276,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.16.0(jiti@2.4.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0)(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1))
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1))
       hasown: 2.0.2
       is-core-module: 2.15.1
       is-glob: 4.0.3
@@ -17303,7 +17304,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.16.0(jiti@2.4.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0)(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1))
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1))
       hasown: 2.0.2
       is-core-module: 2.15.1
       is-glob: 4.0.3
@@ -17472,7 +17473,7 @@ snapshots:
       string.prototype.matchall: 4.0.11
       string.prototype.repeat: 1.0.0
 
-  eslint-plugin-sonarjs@2.0.4(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0)(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)):
+  eslint-plugin-sonarjs@2.0.4(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)):
     dependencies:
       '@babel/core': 7.25.2
       '@babel/eslint-parser': 7.25.1(@babel/core@7.25.2)(eslint@9.16.0(jiti@2.4.1))
@@ -17486,7 +17487,7 @@ snapshots:
       builtin-modules: 3.3.0
       bytes: 3.1.2
       eslint: 9.16.0(jiti@2.4.1)
-      eslint-plugin-import: 2.30.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0)(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1))
+      eslint-plugin-import: 2.30.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.15.0(eslint@9.16.0(jiti@2.4.1))(typescript@5.6.2))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1)))(eslint@9.16.0(jiti@2.4.1))
       eslint-plugin-jsx-a11y: 6.10.0(eslint@9.16.0(jiti@2.4.1))
       eslint-plugin-react: 7.36.1(eslint@9.16.0(jiti@2.4.1))
       eslint-plugin-react-hooks: 4.6.2(eslint@9.16.0(jiti@2.4.1))
@@ -20653,7 +20654,7 @@ snapshots:
 
   qs@6.13.1:
     dependencies:
-      side-channel: 1.0.6
+      side-channel: 1.1.0
 
   query-string@7.1.3:
     dependencies:
